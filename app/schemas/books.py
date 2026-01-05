@@ -1,5 +1,10 @@
-from typing import Optional
+from typing import Optional, Any
 from pydantic import BaseModel
+
+class StandardResponse(BaseModel):
+    success: bool
+    data: Optional[Any] = None
+    message: Optional[str] = None
 
 class BookBase(BaseModel):
     title: str

@@ -1,26 +1,39 @@
-from fastapi import APIRouter
-from app.schemas.books import BookCreate, BookUpdate
+from fastapi import APIRouter, HTTPException
+from app.schemas.books import BookCreate, BookUpdate, StandardResponse
 from app.core.db import db
 from app.services import book_service
 
 router = APIRouter(prefix="/books", tags=["Books"])
 
-@router.post("/")
+@router.post("/", response_model=StandardResponse)
 async def create_book(book: BookCreate):
-    return await book_service.create_book(db.books, book)
+    data = await book_service.create_book(db.books, book)
+    return StandardResponse(
+        success=True,
+        data=data,
+        message="Book created"
+    )
 
-@router.get("/")
+@router.get("/", response_model=StandardResponse)
 async def list_books():
-    return await book_service.get_all_book(db.books)
+    data = await book_service.get_all_book(db.books)
+    return StandardResponse(
+        success = True,
+        data = data,
+        message =  f"{len(data)} books fetched"
+    )
 
-@router.get("/{book_id}")
+@router.get("/{book_id}", response_model=StandardResponse)
 async def get_book(book_id: str):
-    return await book_service.get_book(db.books, book_id)
+    data = await book_service.get_book(db.books, book_id)
+    return StandardResponse(success=True, data=data, message="book returned")
 
-@router.put("/{book_id}")
+@router.put("/{book_id}", response_model=StandardResponse)
 async def update_book(book_id: str, book: BookUpdate):
-    return await book_service.update_book(db.books, book_id, book)
+    data = await book_service.update_book(db.books, book_id, book)
+    return StandardResponse(success=True, data=data, message="book updated")
 
-@router.delete("/{book_id}")
+@router.delete("/{book_id}", response_model=StandardResponse)
 async def delete_book(book_id: str):
-    return await book_service.delete_book(db.books, book_id)
+    data = await book_service.delete_book(db.books, book_id)
+    return StandardResponse(success=True, data=data, message="book deleted")
