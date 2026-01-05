@@ -6,10 +6,8 @@ from app.repositories import books as repo
 async def create_book(collection, book: BookCreate):
     return await repo.create(collection, book)
 
-
 async def get_all_book(collection):
     return await repo.get_all(collection)
-
 
 async def get_book(collection, book_id):
     book = await repo.get_by_id(collection, book_id)
@@ -20,7 +18,6 @@ async def get_book(collection, book_id):
         )
     return book
 
-
 async def update_book(collection, book_id, book: BookUpdate):
     existing = await repo.get_by_id(collection, book_id)
     if not existing:
@@ -29,7 +26,6 @@ async def update_book(collection, book_id, book: BookUpdate):
             detail="Book not found",
         )
     return await repo.update_book(collection, book_id, book)
-
 
 async def delete_book(collection, book_id: str):
     deleted = await repo.delete_book(collection, book_id)

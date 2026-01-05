@@ -1,7 +1,6 @@
 from bson import ObjectId
 from app.schemas.books import BookCreate, BookUpdate
 
-
 async def create(collection, book: BookCreate):
     data = book.model_dump()
     result = await collection.insert_one(data)
@@ -10,7 +9,6 @@ async def create(collection, book: BookCreate):
     data.pop("_id", None)
 
     return data
-
 
 async def get_all(collection):
     books = []
@@ -31,7 +29,6 @@ async def get_by_id(collection, book_id: str):
 
     return book
 
-
 async def update_book(collection, book_id: str, book: BookUpdate):
     update_data = book.model_dump(exclude_unset=True)
 
@@ -44,7 +41,6 @@ async def update_book(collection, book_id: str, book: BookUpdate):
     )
 
     return await get_by_id(collection, book_id)
-
 
 async def delete_book(collection, book_id: str) -> bool:
     result = await collection.delete_one({"_id": ObjectId(book_id)})
